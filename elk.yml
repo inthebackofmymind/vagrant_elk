@@ -1,5 +1,6 @@
 ---
-- hosts: elk
+- hosts: node1, node2
+  become: true 
   tasks:
     # ADD ElasticSearch Repositories
     - copy: src=/v/elk/elasticsearch.repo dest=/etc/yum.repos.d/elasticsearch.repo mode=0755 force=no
@@ -24,8 +25,9 @@
       service: name=elasticsearch state=restarted 
 
 - hosts: node2
+  become: true
   tasks:
     - set_fact: colon=":"
-    - lineinfile: dest=/etc/elasticsearch/elasticsearch.yml regexp='Tetra_search_1' line='Tetra_search_2' state=present 
+    - lineinfile: dest=/etc/elasticsearch/elasticsearch.yml regexp=' node.name{{colon}} Tetra_search_1' line=' node.name{{colon}} Tetra_search_2' state=present 
     - lineinfile: dest=/etc/elasticsearch/elasticsearch.yml regexp=' network.host{{colon}} 192.168.0.34' line=' network.host{{colon}} 192.168.0.35' state=present 
 
