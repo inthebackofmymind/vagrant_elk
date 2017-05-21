@@ -23,8 +23,9 @@
     - name: restart elasticsearch
       service: name=elasticsearch state=restarted 
 
-- hosts: node2 
+- hosts: node2
   tasks:
-    - lineinfile: path=/etc/elasticsearch/elasticsearch.yml regexp=' node.name: Tetra_search_1' line=' node.name: Tetra_search_2' state=present 
-    - lineinfile: path=/etc/elasticsearch/elasticsearch.yml regexp=' network.host: 192.168.0.34' line=' network.host: 192.168.0.35' state=present 
+    - set_fact: colon=":"
+    - lineinfile: path=/etc/elasticsearch/elasticsearch.yml regexp='Tetra_search_1' line='Tetra_search_2' state=present 
+    - lineinfile: path=/etc/elasticsearch/elasticsearch.yml regexp=' network.host{{colon}} 192.168.0.34' line=' network.host{{colon}} 192.168.0.35' state=present 
 
