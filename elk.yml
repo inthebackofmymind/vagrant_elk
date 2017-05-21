@@ -4,6 +4,7 @@
     - copy: src=/v/elk/elasticsearch.repo dest=/etc/yum.repos.d/elasticsearch.repo mode=0755 force=no
 
     - yum: name=java-1.8.0-openjdk state=present update_cache=yes
+    - yum: name=nmap state=present update_cache=yes
     - yum: name=epel-release state=present update_cache=yes
     - yum: name=elasticsearch state=present update_cache=yes
     - yum: name=git state=present update_cache=yes
@@ -11,3 +12,9 @@
 
     - shell: if grep TetraNoodles /etc/elasticsearch/elasticsearch.yml; then echo 'elasticsearch.yml is up-to-date'; else rm -fr /etc/elasticsearch/elasticsearch.yml; fi
     - copy: src=/v/elk/elasticsearch.yml dest=/etc/elasticsearch/elasticsearch.yml mode=0755 force=no
+      notify:
+      - restart elasticsearch 
+
+  handlers:
+    - name: restart elasticsearch
+      service: name=elasticsearch state=restarted 
