@@ -16,14 +16,11 @@ Vagrant.configure("2") do |config|
     yum -y update --exclude=kernel* 
   SHELL
 
-  config.vm.define "192.168.0.34"
-  config.vm.define "192.168.0.35"
-
   config.vm.provision "ansible" do |ansible|
     ansible.playbook = 'elk.yml'
     ansible.groups = {
-      "node1" => ["192.168.0.34"],
-      "node2" => ["192.168.0.35"],
+      "node1" => ["node1"],
+      "node2" => ["node2"],
     }
   end
 end
