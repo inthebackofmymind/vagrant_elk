@@ -15,4 +15,8 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     yum -y update --exclude=kernel* 
   SHELL
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = 'elk.yml'
+  end
 end
