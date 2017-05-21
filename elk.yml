@@ -1,6 +1,7 @@
 ---
 - hosts: elk
   tasks:
+    # ADD ElasticSearch Repositories
     - copy: src=/v/elk/elasticsearch.repo dest=/etc/yum.repos.d/elasticsearch.repo mode=0755 force=no
 
     - yum: name={{item}} state=present update_cache=yes
@@ -12,6 +13,7 @@
        - git 
     
     - service: name=elasticsearch state=started enabled=yes
+    # REMOVE elasticsearch.yml if it's not up-to-date (e.g. the first time you run playbook it'll customize defaults)
     - shell: if grep TetraNoodles /etc/elasticsearch/elasticsearch.yml; then echo 'elasticsearch.yml is up-to-date'; else rm -fr /etc/elasticsearch/elasticsearch.yml; fi
     - copy: src=/v/elk/elasticsearch.yml dest=/etc/elasticsearch/elasticsearch.yml mode=0755 force=no
       notify:
@@ -20,3 +22,9 @@
   handlers:
     - name: restart elasticsearch
       service: name=elasticsearch state=restarted 
+
+- hosts: node2 
+  tasks:
+    - lineinfile: path=/etc/elasticsearch/elasticsearch.yml regexp=' node.name: Tetra_search_1' line=' node.name: Tetra_search_2' state=present 
+    - lineinfile: path=/etc/elasticsearch/elasticsearch.yml regexp=' network.host: 192.168.0.34' line=' network.host: 192.168.0.35' state=present 
+

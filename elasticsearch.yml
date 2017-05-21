@@ -67,7 +67,7 @@
 # Pass an initial list of hosts to perform discovery when new node is started:
 # The default list of hosts is ["127.0.0.1", "[::1]"]
 #
- discovery.zen.ping.unicast.hosts: ["192.168.0.34"]
+ discovery.zen.ping.unicast.hosts: ["192.168.0.34", "192.168.0.35"]
  discovery.zen.ping.multicast.enabled: false
 #
 # Prevent the "split brain" by configuring the majority of nodes (total number of nodes / 2 + 1):
